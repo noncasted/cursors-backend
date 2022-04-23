@@ -1,4 +1,4 @@
-﻿namespace Application.Core.Connections
+﻿namespace Domain.Connection
 {
     public enum TargetConnection
     {

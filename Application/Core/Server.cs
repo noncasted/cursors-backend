@@ -1,8 +1,10 @@
 ﻿using System;
 using Application.Core.Clients;
+using Application.Core.Configuration;
 using Application.Core.DataTransfer;
 using Application.Core.ListenerProcessors;
 using Application.Core.Routing;
+using Infrastructure.Matchmaking;
 
 namespace Application.Core
 {
@@ -14,6 +16,8 @@ namespace Application.Core
         private Router router;
         private PacketSender packetSender;
         private ServerHandle handle;
+        private Matchmaker matchmaker;
+        private RoomsList roomsList;
         
         private ServerClients serverClients;
 
@@ -24,15 +28,19 @@ namespace Application.Core
             packetSender = new PacketSender();
             
             handle = new ServerHandle();
-
             router = new Router();
-            router.BindRoute((int)ClientPackets.welcomeReceived, handle.WelcomeReceived);
-            router.BindRoute((int)ClientPackets.udpTestReceived, handle.UDPTestReceived);
+            roomsList = new RoomsList();
+            matchmaker = new Matchmaker(roomsList, router);
+            
+            matchmaker.Bind(router);
+
+            router.BindGlobal("connected", handle.WelcomeReceived);
+            router.BindGlobal("udp-test", handle.UDPTestReceived);
 
             serverClients = new ServerClients(_maxPlayers, packetSender, router);
 
-            udpProcessor = new UdpProcessor(_port, serverClients);
             tcpProcessor = new TcpProcessor(_port, serverClients);
+            udpProcessor = new UdpProcessor(_port, serverClients);
 
             Console.WriteLine($"Server started on {_port}");
         }

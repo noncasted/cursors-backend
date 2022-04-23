@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using Application.Core.Connections;
+using Application.Core.Configuration;
 using Application.Core.DataTransfer;
 using Application.Core.Routing;
+using Domain.Connection;
+using Domain.DataTransfer;
 
 namespace Application.Core.Clients
 {
@@ -11,10 +13,11 @@ namespace Application.Core.Clients
     {
         public ServerClients(int _maxClients, PacketSender _packetSender, Router _router)
         {
+            
             maxClients = _maxClients;
             
             for (int i = 1; i <= maxClients; i++)
-                clients.Add(i, new Client(i, _packetSender, _router));
+                clients.Add(i, new Client(i, _packetSender, _router, ServerConfig.DefaultConnection));
         }
 
         private readonly int maxClients;
@@ -48,7 +51,7 @@ namespace Application.Core.Clients
             }
         }
 
-        public UdpConnection GetUdp(int _clientId)
+        public IUdpConnection GetUdp(int _clientId)
         {
             return clients[_clientId].Udp;
         }

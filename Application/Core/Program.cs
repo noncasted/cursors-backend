@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Application.Core.Configuration;
+using Domain.Connection;
 
 namespace Application.Core
 {
@@ -12,7 +13,7 @@ namespace Application.Core
         
         public static void Main(string[] _args)
         {
-            ServerConfig.Configurate(50, 26950);
+            ServerConfig.Configurate(50, 26950, TargetConnection.TCP);
             
             isRunning = true;
 

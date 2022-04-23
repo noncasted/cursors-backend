@@ -4,21 +4,21 @@ using System.Net.Sockets;
 using Application.Core.Clients;
 using Application.Core.DataTransfer;
 using Application.Core.Routing;
+using Domain.Connection;
+using Domain.DataTransfer;
 
 namespace Application.Core.Connections
 {
-    public class UdpConnection
+    public class UdpConnection : IUdpConnection
     {
         public UdpConnection(Client _owner, PacketSender _packetSender, Router _router)
         {
-            id = _owner.Id;
             owner = _owner;
 
             packetSender = _packetSender;
             router = _router;
         }
         
-        private readonly int id;
         private readonly Client owner;
 
         private readonly PacketSender packetSender;
@@ -52,7 +52,7 @@ namespace Application.Core.Connections
             udpListener = _udpListener;
             connected = true;
 
-            packetSender.UDPTest(owner);
+            packetSender.TestUdp(owner);
         }
 
         public void SendData(Packet _packet)
@@ -62,6 +62,8 @@ namespace Application.Core.Connections
 
         public void HandleData(Packet _packetData)
         {
+            Console.WriteLine("Handle udp");
+            
             int _packetLength = _packetData.ReadInt();
             byte[] _packetBytes = _packetData.ReadBytes(_packetLength);
                 
@@ -69,8 +71,8 @@ namespace Application.Core.Connections
             {
                 using (Packet _packet = new Packet(_packetBytes))
                 {
-                    int _packetId = _packet.ReadInt();
-                    router.Route(_packetId, id, _packet);
+                    string _route = _packet.ReadString();
+                    router.Route(_route, owner, _packet);
                 }
             });
         }

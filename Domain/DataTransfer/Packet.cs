@@ -2,27 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Core.DataTransfer
+namespace Domain.DataTransfer
 {
-    /// <summary>Sent from server to client.</summary>
-    public enum ServerPackets
-    {
-        welcome = 1,
-        udpTest = 2,
-    }
-
-    /// <summary>Sent from client to server.</summary>
-    public enum ClientPackets
-    {
-        welcomeReceived = 1,
-        udpTestReceived = 2,
-    }
-
     public class Packet : IDisposable
     {
         private List<byte> buffer;
         private byte[] readableBuffer;
         private int readPos;
+        
+        private bool disposed = false;
 
         /// <summary>Creates a new empty packet (without an ID).</summary>
         public Packet()
@@ -50,8 +38,17 @@ namespace Application.Core.DataTransfer
 
             SetBytes(_data);
         }
+        
+        public Packet(string _route)
+        {
+            buffer = new List<byte>(); // Intitialize buffer
+            readPos = 0; // Set readPos to 0
+
+            Write(_route);
+        }
 
         #region Functions
+
         /// <summary>Sets the packet's content and prepares it to be read.</summary>
         /// <param name="_data">The bytes to add to the packet.</param>
         public void SetBytes(byte[] _data)
@@ -63,7 +60,8 @@ namespace Application.Core.DataTransfer
         /// <summary>Inserts the length of the packet's content at the start of the buffer.</summary>
         public void WriteLength()
         {
-            buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count)); // Insert the byte length of the packet at the very beginning
+            buffer.InsertRange(0,
+                BitConverter.GetBytes(buffer.Count)); // Insert the byte length of the packet at the very beginning
         }
 
         /// <summary>Inserts the given int at the start of the buffer.</summary>
@@ -107,51 +105,60 @@ namespace Application.Core.DataTransfer
                 readPos -= 4; // "Unread" the last read int
             }
         }
+
         #endregion
 
         #region Write Data
+
         /// <summary>Adds a byte to the packet.</summary>
         /// <param name="_value">The byte to add.</param>
         public void Write(byte _value)
         {
             buffer.Add(_value);
         }
+
         /// <summary>Adds an array of bytes to the packet.</summary>
         /// <param name="_value">The byte array to add.</param>
         public void Write(byte[] _value)
         {
             buffer.AddRange(_value);
         }
+
         /// <summary>Adds a short to the packet.</summary>
         /// <param name="_value">The short to add.</param>
         public void Write(short _value)
         {
             buffer.AddRange(BitConverter.GetBytes(_value));
         }
+
         /// <summary>Adds an int to the packet.</summary>
         /// <param name="_value">The int to add.</param>
         public void Write(int _value)
         {
             buffer.AddRange(BitConverter.GetBytes(_value));
         }
+
         /// <summary>Adds a long to the packet.</summary>
         /// <param name="_value">The long to add.</param>
         public void Write(long _value)
         {
             buffer.AddRange(BitConverter.GetBytes(_value));
         }
+
         /// <summary>Adds a float to the packet.</summary>
         /// <param name="_value">The float to add.</param>
         public void Write(float _value)
         {
             buffer.AddRange(BitConverter.GetBytes(_value));
         }
+
         /// <summary>Adds a bool to the packet.</summary>
         /// <param name="_value">The bool to add.</param>
         public void Write(bool _value)
         {
             buffer.AddRange(BitConverter.GetBytes(_value));
         }
+
         /// <summary>Adds a string to the packet.</summary>
         /// <param name="_value">The string to add.</param>
         public void Write(string _value)
@@ -159,9 +166,11 @@ namespace Application.Core.DataTransfer
             Write(_value.Length); // Add the length of the string to the packet
             buffer.AddRange(Encoding.ASCII.GetBytes(_value)); // Add the string itself
         }
+
         #endregion
 
         #region Read Data
+
         /// <summary>Reads a byte from the packet.</summary>
         /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
         public byte ReadByte(bool _moveReadPos = true)
@@ -175,6 +184,7 @@ namespace Application.Core.DataTransfer
                     // If _moveReadPos is true
                     readPos += 1; // Increase readPos by 1
                 }
+
                 return _value; // Return the byte
             }
             else
@@ -191,12 +201,15 @@ namespace Application.Core.DataTransfer
             if (buffer.Count > readPos)
             {
                 // If there are unread bytes
-                byte[] _value = buffer.GetRange(readPos, _length).ToArray(); // Get the bytes at readPos' position with a range of _length
+                byte[] _value =
+                    buffer.GetRange(readPos, _length)
+                        .ToArray(); // Get the bytes at readPos' position with a range of _length
                 if (_moveReadPos)
                 {
                     // If _moveReadPos is true
                     readPos += _length; // Increase readPos by _length
                 }
+
                 return _value; // Return the bytes
             }
             else
@@ -218,6 +231,7 @@ namespace Application.Core.DataTransfer
                     // If _moveReadPos is true and there are unread bytes
                     readPos += 2; // Increase readPos by 2
                 }
+
                 return _value; // Return the short
             }
             else
@@ -239,6 +253,7 @@ namespace Application.Core.DataTransfer
                     // If _moveReadPos is true
                     readPos += 4; // Increase readPos by 4
                 }
+
                 return _value; // Return the int
             }
             else
@@ -260,6 +275,7 @@ namespace Application.Core.DataTransfer
                     // If _moveReadPos is true
                     readPos += 8; // Increase readPos by 8
                 }
+
                 return _value; // Return the long
             }
             else
@@ -281,6 +297,7 @@ namespace Application.Core.DataTransfer
                     // If _moveReadPos is true
                     readPos += 4; // Increase readPos by 4
                 }
+
                 return _value; // Return the float
             }
             else
@@ -302,6 +319,7 @@ namespace Application.Core.DataTransfer
                     // If _moveReadPos is true
                     readPos += 1; // Increase readPos by 1
                 }
+
                 return _value; // Return the bool
             }
             else
@@ -317,12 +335,14 @@ namespace Application.Core.DataTransfer
             try
             {
                 int _length = ReadInt(); // Get the length of the string
-                string _value = Encoding.ASCII.GetString(readableBuffer, readPos, _length); // Convert the bytes to a string
+                string _value =
+                    Encoding.ASCII.GetString(readableBuffer, readPos, _length); // Convert the bytes to a string
                 if (_moveReadPos && _value.Length > 0)
                 {
                     // If _moveReadPos is true string is not empty
                     readPos += _length; // Increase readPos by the length of the string
                 }
+
                 return _value; // Return the string
             }
             catch
@@ -330,28 +350,27 @@ namespace Application.Core.DataTransfer
                 throw new Exception("Could not read value of type 'string'!");
             }
         }
+
         #endregion
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool _disposing)
-        {
-            if (!disposed)
-            {
-                if (_disposing)
-                {
-                    buffer = null;
-                    readableBuffer = null;
-                    readPos = 0;
-                }
-
-                disposed = true;
-            }
-        }
         
+        private void TryDispose(bool _disposing)
+        {
+            if (disposed == true)
+                return;
+
+            if (_disposing == false)
+                return;
+            
+            buffer = null;
+            readableBuffer = null;
+            readPos = 0;
+
+            disposed = true;
+        }
+
         public void Dispose()
         {
-            Dispose(true);
+            TryDispose(true);
             GC.SuppressFinalize(this);
         }
     }

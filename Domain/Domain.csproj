@@ -4,14 +4,13 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{B1627E2B-3583-44D0-BD6C-21664E1EE473}</ProjectGuid>
-        <OutputType>Exe</OutputType>
+        <ProjectGuid>{47C5C91A-03C9-4578-B334-99FB22CD75F4}</ProjectGuid>
+        <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>Application</RootNamespace>
-        <AssemblyName>Application</AssemblyName>
+        <RootNamespace>Domain</RootNamespace>
+        <AssemblyName>Domain</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,40 +52,26 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Core\Clients\Client.cs" />
-        <Compile Include="Core\Clients\ServerClients.cs" />
-        <Compile Include="Core\Configuration\Constants.cs" />
-        <Compile Include="Core\Configuration\ServerConfig.cs" />
-        <Compile Include="Core\Connections\TcpConnection.cs" />
-        <Compile Include="Core\Connections\UdpConnection.cs" />
-        <Compile Include="Core\DataTransfer\PacketSender.cs" />
-        <Compile Include="Core\DataTransfer\ThreadManager.cs" />
-        <Compile Include="Core\GameLogic.cs" />
-        <Compile Include="Core\ListenerProcessors\TcpProcessor.cs" />
-        <Compile Include="Core\ListenerProcessors\UdpProcessor.cs" />
-        <Compile Include="Core\Program.cs" />
-        <Compile Include="Core\Routing\Router.cs" />
-        <Compile Include="Core\Server.cs" />
-        <Compile Include="Core\ServerHandle.cs" />
-        <Compile Include="Core\Services\ServicesHandler.cs" />
+        <Compile Include="Connection\IClient.cs" />
+        <Compile Include="Connection\ITcpConnection.cs" />
+        <Compile Include="Connection\IUdpConnection.cs" />
+        <Compile Include="Connection\TargetConnection.cs" />
+        <Compile Include="DataTransfer\IPacketSender.cs" />
+        <Compile Include="DataTransfer\Packet.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Services\ConvertExtensions.cs" />
+        <Compile Include="Services\GlobalService.cs" />
+        <Compile Include="Services\IRoomServiceResolver.cs" />
+        <Compile Include="Services\IRouter.cs" />
+        <Compile Include="Services\Player.cs" />
+        <Compile Include="Services\Room.cs" />
+        <Compile Include="Services\RoomBinder.cs" />
+        <Compile Include="Services\RoomRoutes.cs" />
+        <Compile Include="Services\RouteTarget.cs" />
+        <Compile Include="Services\RoomService.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\Domain\Domain.csproj">
-        <Project>{47c5c91a-03c9-4578-b334-99fb22cd75f4}</Project>
-        <Name>Domain</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
-        <Project>{208ce533-ccdd-47ef-bfe6-553b2e7aafa0}</Project>
-        <Name>Infrastructure</Name>
-      </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Core\Converting" />
-      <Folder Include="Core\Rooms" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

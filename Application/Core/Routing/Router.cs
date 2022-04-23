@@ -1,27 +1,45 @@
 ﻿using System.Collections.Generic;
-using Application.Core.DataTransfer;
+using Domain.Connection;
+using Domain.DataTransfer;
+using Domain.Services;
 
 namespace Application.Core.Routing
 {
-    public class Router
+    public class Router : IRouter
     {
         public Router()
         {
-            routes = new Dictionary<int, RouteTarget>();
+            globalRoutes = new Dictionary<string, RouteTarget>();
+            roomRoutes = new Dictionary<int, RoomRoutes>();
         }
         
-        public delegate void RouteTarget(int _senderClient, Packet _packet);
+        private readonly Dictionary<string, RouteTarget> globalRoutes;
+        private readonly Dictionary<int, RoomRoutes> roomRoutes;
         
-        private static Dictionary<int, RouteTarget> routes;
-
-        public void Route(int _route, int _clientId, Packet _packet)
+        public void BindGlobal(string _route, RouteTarget _target)
         {
-            routes[_route](_clientId, _packet);
+            globalRoutes.Add(_route, _target);
+        }
+        
+        public void BindLocal(int _roomId, RoomRoutes _roomRoutes)
+        {
+            roomRoutes.Add(_roomId, _roomRoutes);
+        }
+        
+        public void Route(string _route, IClient _client, Packet _packet)
+        {
+            if (IsGlobal(_route) == true)
+                globalRoutes[_route](_client, _packet);
+            else
+                roomRoutes[_client.RoomId].routes[_route](_client, _packet);
         }
 
-        public void BindRoute(int _route, RouteTarget _target)
+        private bool IsGlobal(string _route)
         {
-            routes.Add(_route, _target);
+            if (globalRoutes.ContainsKey(_route) == true)
+                return true;
+
+            return false;
         }
     }
 }

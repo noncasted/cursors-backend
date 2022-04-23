@@ -5,29 +5,33 @@ using Application.Core.Clients;
 using Application.Core.Configuration;
 using Application.Core.DataTransfer;
 using Application.Core.Routing;
+using Domain.Connection;
+using Domain.DataTransfer;
 
 namespace Application.Core.Connections
 {
-    public class TcpConnection
+    public class TcpConnection : ITcpConnection
     {
         public TcpConnection(Client _owner, PacketSender _packetSender, Router _router)
         {
-            id = _owner.Id;
+            owner = _owner;
+
+            packetSender = _packetSender;
+            router = _router;
+            
             dataBufferSize = Constants.TcpBufferSize;
             receiveBuffer = new byte[dataBufferSize];
-            packetSender = _packetSender;
-            owner = _owner;
-            router = _router;
         }
 
-        private readonly int dataBufferSize;
-        private readonly int id;
-
-        private readonly Packet receivedData = new Packet();
-        private readonly byte[] receiveBuffer;
-        private readonly PacketSender packetSender;
-        private readonly Router router;
         private readonly Client owner;
+        
+        private readonly Router router;
+        private readonly PacketSender packetSender;
+
+        private readonly int dataBufferSize;
+        private readonly byte[] receiveBuffer;
+        
+        private readonly Packet receivedData = new Packet();
 
         private bool connected = false;
 
@@ -41,10 +45,10 @@ namespace Application.Core.Connections
         {
             if (_socket == null)
             {
-                Console.WriteLine($"Trying to connect client(id: {id}) with empty socket");
+                Console.WriteLine($"Trying to connect client(id: {owner.Id}) with empty socket");
                 return;
             }
-
+            
             connected = true;
 
             socket = _socket;
@@ -54,8 +58,8 @@ namespace Application.Core.Connections
             stream = socket.GetStream();
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
-            packetSender.Welcome(owner, "Welcome to the server");
-            //PacketSender.Welcome(id, "Welcome to the server");
+            packetSender.SendConnectionData(owner, "Welcome to the server");
+            
             Console.WriteLine("Welcome sent");
         }
 
@@ -94,7 +98,7 @@ namespace Application.Core.Connections
             }
 
             byte[] _data = new byte[_byteLength];
-
+            
             Array.Copy(receiveBuffer, _data, _byteLength);
 
             receivedData.Reset(HandleData(_data));
@@ -133,8 +137,8 @@ namespace Application.Core.Connections
                 {
                     using (Packet _packet = new Packet(_packetBytes))
                     {
-                        int _packetId = _packet.ReadInt();
-                        router.Route(_packetId, id, _packet);
+                        string _route = _packet.ReadString();
+                        router.Route(_route, owner, _packet);
                     }
                 });
 

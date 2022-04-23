@@ -32,6 +32,7 @@ namespace Application.Core.DataTransfer
             if (actionToExecuteOnMainThread)
             {
                 executeCopiedOnMainThread.Clear();
+                
                 lock (executeOnMainThread)
                 {
                     executeCopiedOnMainThread.AddRange(executeOnMainThread);
@@ -40,9 +41,7 @@ namespace Application.Core.DataTransfer
                 }
 
                 for (int i = 0; i < executeCopiedOnMainThread.Count; i++)
-                {
                     executeCopiedOnMainThread[i]();
-                }
             }
         }
     }

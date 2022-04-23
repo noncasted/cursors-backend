@@ -2,8 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using Application.Core.Clients;
-using Application.Core.Connections;
-using Application.Core.DataTransfer;
+using Domain.Connection;
+using Domain.DataTransfer;
 
 namespace Application.Core.ListenerProcessors
 {
@@ -14,18 +14,20 @@ namespace Application.Core.ListenerProcessors
             listener = new UdpClient(_port);
             clients = _clients;
             
-            listener.BeginReceive(UDPReceiveCallback, null);
+            listener.BeginReceive(ReceiveCallback, null);
         }
         
         private readonly UdpClient listener;
         private readonly ServerClients clients;
         
-        private void UDPReceiveCallback(IAsyncResult _result)
+        private void ReceiveCallback(IAsyncResult _result)
         {
+            Console.WriteLine("Udp received 00");
+            
             IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
             byte[] _data = listener.EndReceive(_result, ref _clientEndPoint);
-            listener.BeginReceive(UDPReceiveCallback, null);
+            listener.BeginReceive(ReceiveCallback, null);
 
             if (_data.Length < 4)
                 return;
@@ -37,10 +39,11 @@ namespace Application.Core.ListenerProcessors
                 if (_clientId == 0)
                     return;
 
-                UdpConnection _connection = clients.GetUdp(_clientId);
+                IUdpConnection _connection = clients.GetUdp(_clientId);
                 
                 if (_connection.Connected == false)
                 {
+                    Console.WriteLine("Not connected");
                     _connection.Connect(_clientEndPoint, listener);
                     return;
                 }
@@ -49,6 +52,5 @@ namespace Application.Core.ListenerProcessors
                     _connection.HandleData(_packet);
             }
         }
-
     }
 }
