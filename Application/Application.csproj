@@ -33,16 +33,38 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="mscorlib" />
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Core\Client.cs" />
+        <Compile Include="Core\Clients\Client.cs" />
+        <Compile Include="Core\Clients\ServerClients.cs" />
+        <Compile Include="Core\Configuration\Constants.cs" />
+        <Compile Include="Core\Configuration\ServerConfig.cs" />
+        <Compile Include="Core\Connections\TargetConnection.cs" />
+        <Compile Include="Core\Connections\TcpConnection.cs" />
+        <Compile Include="Core\Connections\UdpConnection.cs" />
+        <Compile Include="Core\DataTransfer\Packet.cs" />
+        <Compile Include="Core\DataTransfer\PacketSender.cs" />
+        <Compile Include="Core\DataTransfer\ThreadManager.cs" />
+        <Compile Include="Core\GameLogic.cs" />
+        <Compile Include="Core\ListenerProcessors\TcpProcessor.cs" />
+        <Compile Include="Core\ListenerProcessors\UdpProcessor.cs" />
         <Compile Include="Core\Program.cs" />
+        <Compile Include="Core\Routing\Router.cs" />
         <Compile Include="Core\Server.cs" />
+        <Compile Include="Core\ServerHandle.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

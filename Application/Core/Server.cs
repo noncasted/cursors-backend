@@ -1,58 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
+using Application.Core.Clients;
+using Application.Core.DataTransfer;
+using Application.Core.ListenerProcessors;
+using Application.Core.Routing;
 
 namespace Application.Core
 {
     public class Server
     {
-        public static int MaxPlayers { get; private set; }
-        public static int Port { get; private set; }
+        private TcpProcessor tcpProcessor;
+        private UdpProcessor udpProcessor;
+        
+        private Router router;
+        private PacketSender packetSender;
+        private ServerHandle handle;
+        
+        private ServerClients serverClients;
 
-        public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
-
-        private static TcpListener tcpListener;
-
-        public static void Start(int _maxPlayers, int _port)
+        public void Start(int _maxPlayers, int _port)
         {
-            MaxPlayers = _maxPlayers;
-            Port = _port;
-
             Console.WriteLine("Starting server...");
-            InitializeServerData();
             
-            tcpListener = new TcpListener(IPAddress.Any, Port);
-            tcpListener.Start();
-            tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
-            Console.WriteLine($"Server started on {Port}");
-        }
+            packetSender = new PacketSender();
+            
+            handle = new ServerHandle();
 
-        private static void TCPConnectCallback(IAsyncResult _result)
-        {
-            TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
-            tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
-            
-            Console.WriteLine($"Incoming connection from {_client.Client.RemoteEndPoint}...");
-            
-            for (int i = 1; i <= MaxPlayers; i++)
-            {
-                if (clients[i].tcp.socket == null)
-                {
-                    clients[i].tcp.Connect(_client);
-                    return;
-                }
-            }
-            
-            Console.WriteLine($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
-        }
+            router = new Router();
+            router.BindRoute((int)ClientPackets.welcomeReceived, handle.WelcomeReceived);
+            router.BindRoute((int)ClientPackets.udpTestReceived, handle.UDPTestReceived);
 
-        private static void InitializeServerData()
-        {
-            for (int i = 1; i <= MaxPlayers; i++)
-            {
-                clients.Add(i, new Client(i));
-            }
+            serverClients = new ServerClients(_maxPlayers, packetSender, router);
+
+            udpProcessor = new UdpProcessor(_port, serverClients);
+            tcpProcessor = new TcpProcessor(_port, serverClients);
+
+            Console.WriteLine($"Server started on {_port}");
         }
     }
 }
