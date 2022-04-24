@@ -40,10 +40,12 @@ namespace Application.Core.ListenerProcessors
                     return;
 
                 IUdpConnection _connection = clients.GetUdp(_clientId);
-                
+                Console.WriteLine($"udp client {_clientId}");
+
                 if (_connection.Connected == false)
                 {
-                    Console.WriteLine("Not connected");
+                    Console.WriteLine("Udp not connected");
+                    
                     _connection.Connect(_clientEndPoint, listener);
                     return;
                 }

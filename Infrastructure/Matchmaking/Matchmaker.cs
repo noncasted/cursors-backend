@@ -45,7 +45,5 @@ namespace Infrastructure.Matchmaking
             
             roomsList.Add(_room);
         }
-
-        
     }
 }

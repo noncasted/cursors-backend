@@ -1,6 +1,5 @@
 ﻿using System;
 using Application.Core.Clients;
-using Application.Core.Configuration;
 using Application.Core.DataTransfer;
 using Application.Core.ListenerProcessors;
 using Application.Core.Routing;
@@ -34,8 +33,8 @@ namespace Application.Core
             
             matchmaker.Bind(router);
 
-            router.BindGlobal("connected", handle.WelcomeReceived);
-            router.BindGlobal("udp-test", handle.UDPTestReceived);
+            router.BindGlobal("s-on-connected", handle.OnClientConnected);
+            router.BindGlobal("s-connect-udp", handle.OnUdpConnection);
 
             serverClients = new ServerClients(_maxPlayers, packetSender, router);
 

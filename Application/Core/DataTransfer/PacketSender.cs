@@ -10,7 +10,7 @@ namespace Application.Core.DataTransfer
     {
         public void SendConnectionData(Client _client, string _message)
         {
-            using (Packet _packet = new Packet("connection"))
+            using (Packet _packet = new Packet("c-on-connected"))
             {
                 _packet.Write(_message);
                 _packet.Write(_client.Id);
@@ -19,11 +19,11 @@ namespace Application.Core.DataTransfer
             }
         }
 
-        public void TestUdp(Client _client)
+        public void ConnectUdp(Client _client)
         {
             Console.WriteLine("Send test udp");
             
-            using (Packet _packet = new Packet("connection-udp"))
+            using (Packet _packet = new Packet("c-connect-udp"))
             {
                 _packet.Write("Test packet for UDP");
                 

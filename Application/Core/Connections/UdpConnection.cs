@@ -51,8 +51,8 @@ namespace Application.Core.Connections
             endPoint = _endPoint;
             udpListener = _udpListener;
             connected = true;
-
-            packetSender.TestUdp(owner);
+            
+            packetSender.ConnectUdp(owner);
         }
 
         public void SendData(Packet _packet)

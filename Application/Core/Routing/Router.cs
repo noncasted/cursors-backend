@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Domain.Connection;
 using Domain.DataTransfer;
 using Domain.Services;
@@ -28,6 +29,8 @@ namespace Application.Core.Routing
         
         public void Route(string _route, IClient _client, Packet _packet)
         {
+            Console.WriteLine($"New route: {_route}");
+            
             if (IsGlobal(_route) == true)
                 globalRoutes[_route](_client, _packet);
             else

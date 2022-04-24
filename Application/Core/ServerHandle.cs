@@ -6,7 +6,7 @@ namespace Application.Core
 {
     public class ServerHandle
     {
-        public void WelcomeReceived(IClient _client, Packet _packet)
+        public void OnClientConnected(IClient _client, Packet _packet)
         {
             int _clientIdCheck = _packet.ReadInt();
             string _userName = _packet.ReadString();
@@ -19,7 +19,7 @@ namespace Application.Core
             }
         }
 
-        public void UDPTestReceived(IClient _client, Packet _packet)
+        public void OnUdpConnection(IClient _client, Packet _packet)
         {
             string _message = _packet.ReadString();
             

@@ -59,8 +59,6 @@ namespace Application.Core.Connections
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
             packetSender.SendConnectionData(owner, "Welcome to the server");
-            
-            Console.WriteLine("Welcome sent");
         }
 
         public void SendData(Packet _packet)
@@ -108,9 +106,6 @@ namespace Application.Core.Connections
                 Console.WriteLine($"Stream writing is unavailable");
                 return;
             }
-
-            Console.WriteLine("Packet received");
-
 
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
         }
