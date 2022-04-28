@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace Application.Core.Converting
+namespace Domain.Services
 {
     public static class ConvertExtensions
     {

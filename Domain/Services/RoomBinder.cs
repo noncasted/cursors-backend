@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Domain.DataTransfer;
 
 namespace Domain.Services
 {
@@ -6,14 +7,14 @@ namespace Domain.Services
     {
         public RoomBinder()
         {
-            routes = new Dictionary<string, RouteTarget>();
+            routes = new Dictionary<ServerRoute, RouteTarget>();
         }
         
-        private readonly Dictionary<string, RouteTarget> routes;
+        private readonly Dictionary<ServerRoute, RouteTarget> routes;
 
-        public void Bind(string _route, RouteTarget _target)
+        public void Bind(ServerRoute serverRoute, RouteTarget _target)
         {
-            routes.Add(_route, _target);
+            routes.Add(serverRoute, _target);
         }
 
         public RoomRoutes GetRoutes()

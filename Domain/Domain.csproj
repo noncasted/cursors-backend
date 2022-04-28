@@ -56,8 +56,10 @@
         <Compile Include="Connection\ITcpConnection.cs" />
         <Compile Include="Connection\IUdpConnection.cs" />
         <Compile Include="Connection\TargetConnection.cs" />
+        <Compile Include="DataTransfer\ClientRoute.cs" />
         <Compile Include="DataTransfer\IPacketSender.cs" />
         <Compile Include="DataTransfer\Packet.cs" />
+        <Compile Include="DataTransfer\ServerRoute.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Services\ConvertExtensions.cs" />
         <Compile Include="Services\GlobalService.cs" />

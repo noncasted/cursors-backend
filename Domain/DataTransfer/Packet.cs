@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Domain.Services;
 
 namespace Domain.DataTransfer
 {
@@ -28,6 +29,23 @@ namespace Domain.DataTransfer
 
             Write(_id); // Write packet id to the buffer
         }
+        
+        public Packet(ClientRoute _route)
+        {
+            buffer = new List<byte>(); // Intitialize buffer
+            readPos = 0; // Set readPos to 0
+
+            Write((int)_route); // Write packet id to the buffer
+        }
+        
+        public Packet(ServerRoute _route)
+        {
+            buffer = new List<byte>(); // Intitialize buffer
+            readPos = 0; // Set readPos to 0
+
+            Write((int)_route); // Write packet id to the buffer
+        }
+
 
         /// <summary>Creates a packet from which data can be read. Used for receiving.</summary>
         /// <param name="_data">The bytes to add to the packet.</param>

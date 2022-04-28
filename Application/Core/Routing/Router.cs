@@ -10,16 +10,16 @@ namespace Application.Core.Routing
     {
         public Router()
         {
-            globalRoutes = new Dictionary<string, RouteTarget>();
+            globalRoutes = new Dictionary<ServerRoute, RouteTarget>();
             roomRoutes = new Dictionary<int, RoomRoutes>();
         }
         
-        private readonly Dictionary<string, RouteTarget> globalRoutes;
+        private readonly Dictionary<ServerRoute, RouteTarget> globalRoutes;
         private readonly Dictionary<int, RoomRoutes> roomRoutes;
         
-        public void BindGlobal(string _route, RouteTarget _target)
+        public void BindGlobal(ServerRoute serverRoute, RouteTarget _target)
         {
-            globalRoutes.Add(_route, _target);
+            globalRoutes.Add(serverRoute, _target);
         }
         
         public void BindLocal(int _roomId, RoomRoutes _roomRoutes)
@@ -27,19 +27,19 @@ namespace Application.Core.Routing
             roomRoutes.Add(_roomId, _roomRoutes);
         }
         
-        public void Route(string _route, IClient _client, Packet _packet)
+        public void Route(ServerRoute serverRoute, IClient _client, Packet _packet)
         {
-            Console.WriteLine($"New route: {_route}");
+            Console.WriteLine($"New route: {serverRoute}");
             
-            if (IsGlobal(_route) == true)
-                globalRoutes[_route](_client, _packet);
+            if (IsGlobal(serverRoute) == true)
+                globalRoutes[serverRoute](_client, _packet);
             else
-                roomRoutes[_client.RoomId].routes[_route](_client, _packet);
+                roomRoutes[_client.RoomId].routes[serverRoute](_client, _packet);
         }
 
-        private bool IsGlobal(string _route)
+        private bool IsGlobal(ServerRoute serverRoute)
         {
-            if (globalRoutes.ContainsKey(_route) == true)
+            if (globalRoutes.ContainsKey(serverRoute) == true)
                 return true;
 
             return false;

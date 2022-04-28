@@ -23,7 +23,7 @@ namespace Infrastructure.Matchmaking
 
         protected override void OnBinding(IRouter _router)
         {
-            _router.BindGlobal("create-room", CreateRoom);
+            _router.BindGlobal(ServerRoute.Create_Room, CreateRoom);
         }
         
         private void CreateRoom(IClient _client, Packet _packet)

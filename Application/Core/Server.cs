@@ -3,6 +3,8 @@ using Application.Core.Clients;
 using Application.Core.DataTransfer;
 using Application.Core.ListenerProcessors;
 using Application.Core.Routing;
+using Domain.DataTransfer;
+using Domain.Services;
 using Infrastructure.Matchmaking;
 
 namespace Application.Core
@@ -33,8 +35,8 @@ namespace Application.Core
             
             matchmaker.Bind(router);
 
-            router.BindGlobal("s-on-connected", handle.OnClientConnected);
-            router.BindGlobal("s-connect-udp", handle.OnUdpConnection);
+            router.BindGlobal(ServerRoute.Connection, handle.OnClientConnected);
+            router.BindGlobal(ServerRoute.Connection_Udp, handle.OnUdpConnection);
 
             serverClients = new ServerClients(_maxPlayers, packetSender, router);
 

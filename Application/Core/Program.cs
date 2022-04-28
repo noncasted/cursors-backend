@@ -5,7 +5,7 @@ using Domain.Connection;
 
 namespace Application.Core
 {
-    internal static class Program
+    /*internal static class Program
     {
         private static bool isRunning = false;
 
@@ -47,5 +47,5 @@ namespace Application.Core
                 }
             }
         }
-    }
+    }*/
 }

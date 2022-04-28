@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{C84AC446-3D2C-44C2-8C2B-7F2B090B01D9}</ProjectGuid>
+        <OutputType>Exe</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Server</RootNamespace>
+        <AssemblyName>Server</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="mscorlib" />
+        <Reference Include="System" />
+        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Core\Config\Constants.cs" />
+        <Compile Include="Core\Config\ServerConfig.cs" />
+        <Compile Include="Core\Connection\Connection\Handling\Client.cs" />
+        <Compile Include="Core\Connection\Connection\Handling\TargetConnection.cs" />
+        <Compile Include="Core\Connection\Connection\Handling\TcpConnection.cs" />
+        <Compile Include="Core\Connection\Connection\Handling\UdpConnection.cs" />
+        <Compile Include="Core\Connection\Connection\Processing\TcpProcessor.cs" />
+        <Compile Include="Core\Connection\Connection\Processing\UdpProcessor.cs" />
+        <Compile Include="Core\Connection\Packet.cs" />
+        <Compile Include="Core\Processing\ExecutablePacket.cs" />
+        <Compile Include="Core\Processing\ProcessableThread.cs" />
+        <Compile Include="Core\Processing\ThreadManager.cs" />
+        <Compile Include="Core\Processing\ThreadsRunner.cs" />
+        <Compile Include="Core\Program.cs" />
+        <Compile Include="Core\Rooms\Player.cs" />
+        <Compile Include="Core\Rooms\Room.cs" />
+        <Compile Include="Core\Rooms\RoomServiceResolver.cs" />
+        <Compile Include="Core\Rooms\RoomType.cs" />
+        <Compile Include="Core\Routing\RoomRoutes.cs" />
+        <Compile Include="Core\Routing\Router.cs" />
+        <Compile Include="Core\Routing\Routes\ClientRoute.cs" />
+        <Compile Include="Core\Routing\Routes\ServerRoute.cs" />
+        <Compile Include="Core\Routing\RouteTarget.cs" />
+        <Compile Include="Core\ServerHandler.cs" />
+        <Compile Include="Core\Services\Global\GlobalBinder.cs" />
+        <Compile Include="Core\Services\Global\GlobalService.cs" />
+        <Compile Include="Core\Services\Room\RoomBinder.cs" />
+        <Compile Include="Core\Services\Room\RoomService.cs" />
+        <Compile Include="Core\Users\User.cs" />
+        <Compile Include="Core\Users\UsersList.cs" />
+        <Compile Include="Features\Execution\Threads\ConnectionsThread.cs" />
+        <Compile Include="Features\Execution\Threads\LogicThread.cs" />
+        <Compile Include="Features\Global\Common\Services\GlobalServicesHolder.cs" />
+        <Compile Include="Features\Global\Connector\ConnectorService.cs" />
+        <Compile Include="Features\Global\Matchmaking\MatchmakingService.cs" />
+        <Compile Include="Features\Global\Matchmaking\RoomCreator.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

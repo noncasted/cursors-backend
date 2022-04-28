@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Application.Core.Clients;
 using Domain.Connection;
 using Domain.DataTransfer;
+using Domain.Services;
 
 namespace Application.Core.DataTransfer
 {
@@ -10,7 +11,7 @@ namespace Application.Core.DataTransfer
     {
         public void SendConnectionData(Client _client, string _message)
         {
-            using (Packet _packet = new Packet("c-on-connected"))
+            using (Packet _packet = new Packet(ClientRoute.On_Connected))
             {
                 _packet.Write(_message);
                 _packet.Write(_client.Id);
@@ -23,7 +24,7 @@ namespace Application.Core.DataTransfer
         {
             Console.WriteLine("Send test udp");
             
-            using (Packet _packet = new Packet("c-connect-udp"))
+            using (Packet _packet = new Packet(ClientRoute.On_Connected_Udp))
             {
                 _packet.Write("Test packet for UDP");
                 

@@ -6,6 +6,7 @@ using Application.Core.DataTransfer;
 using Application.Core.Routing;
 using Domain.Connection;
 using Domain.DataTransfer;
+using Domain.Services;
 
 namespace Application.Core.Connections
 {
@@ -71,8 +72,8 @@ namespace Application.Core.Connections
             {
                 using (Packet _packet = new Packet(_packetBytes))
                 {
-                    string _route = _packet.ReadString();
-                    router.Route(_route, owner, _packet);
+                    int _route = _packet.ReadInt();
+                    router.Route((ServerRoute)_route, owner, _packet);
                 }
             });
         }

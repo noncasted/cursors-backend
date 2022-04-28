@@ -12,7 +12,7 @@ namespace Infrastructure.Rooms
 
         protected override void OnBinding(RoomBinder _router)
         {
-            _router.Bind("players-observer", OnPlayerMessage);
+            _router.Bind(ServerRoute.Room_Players_Oberserver, OnPlayerMessage);
         }
 
         private void OnPlayerMessage(IClient _client, Packet _packet)
