@@ -8,10 +8,10 @@ namespace Server.Core.Connection.Connection.Processing
 {
     public class UdpProcessor
     {
-        public UdpProcessor(int _port, UsersList users)
+        public UdpProcessor(int _port, UsersList _users)
         {
             listener = new UdpClient(_port);
-            users = users;
+            users = _users;
             
             listener.BeginReceive(ReceiveCallback, null);
         }
@@ -21,8 +21,6 @@ namespace Server.Core.Connection.Connection.Processing
         
         private void ReceiveCallback(IAsyncResult _result)
         {
-            Console.WriteLine("Udp received 00");
-            
             IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
             byte[] _data = listener.EndReceive(_result, ref _clientEndPoint);
@@ -37,7 +35,7 @@ namespace Server.Core.Connection.Connection.Processing
 
                 if (_clientId == 0)
                     return;
-
+                
                 UdpConnection _connection = users.GetUser(_clientId).Client.Udp;
 
                 if (_connection.Connected == false)

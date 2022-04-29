@@ -220,8 +220,7 @@ namespace Server.Core.Connection
             {
                 // If there are unread bytes
                 byte[] _value =
-                    buffer.GetRange(readPos, _length)
-                        .ToArray(); // Get the bytes at readPos' position with a range of _length
+                    buffer.GetRange(readPos, _length).ToArray(); // Get the bytes at readPos' position with a range of _length
                 if (_moveReadPos)
                 {
                     // If _moveReadPos is true

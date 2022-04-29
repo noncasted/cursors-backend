@@ -51,6 +51,8 @@ namespace Server.Core.Connection.Connection.Handling
 
         public void SendData(Packet _packet)
         {
+            _packet.WriteLength();
+            
             udpListener.BeginSend(_packet.ToArray(), _packet.GetLength(), endPoint, null, null);
         }
 

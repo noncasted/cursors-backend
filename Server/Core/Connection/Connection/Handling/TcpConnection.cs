@@ -60,6 +60,8 @@ namespace Server.Core.Connection.Connection.Handling
 
         public void SendData(Packet _packet)
         {
+            _packet.WriteLength();
+            
             if (connected == false)
                 return;
 
@@ -99,7 +101,7 @@ namespace Server.Core.Connection.Connection.Handling
 
             if (stream.CanRead == false)
             {
-                Console.WriteLine($"Stream writing is unavailable");
+                Console.WriteLine($"Stream reading is unavailable");
                 return;
             }
 

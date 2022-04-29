@@ -30,8 +30,6 @@ namespace Server.Core.Connection.Connection.Handling
                 for (int i = 0; i < _data.Length; i++)
                     _packet.Write(_data[i]);
                 
-                _packet.WriteLength();
-                
                 switch (defaultConnection)
                 {
                     case TargetConnection.TCP:
