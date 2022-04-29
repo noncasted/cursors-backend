@@ -1,6 +1,4 @@
-﻿using Domain.DataTransfer;
-
-namespace Domain.Connection
+﻿namespace Domain.Connection
 {
     public interface IClient
     {

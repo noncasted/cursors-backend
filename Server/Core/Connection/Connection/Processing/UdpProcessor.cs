@@ -25,10 +25,10 @@ namespace Server.Core.Connection.Connection.Processing
 
             byte[] _data = listener.EndReceive(_result, ref _clientEndPoint);
             listener.BeginReceive(ReceiveCallback, null);
-
+            
             if (_data.Length < 4)
                 return;
-
+            
             using (Packet _packet = new Packet(_data))
             {
                 int _clientId = _packet.ReadInt();
@@ -37,7 +37,7 @@ namespace Server.Core.Connection.Connection.Processing
                     return;
                 
                 UdpConnection _connection = users.GetUser(_clientId).Client.Udp;
-
+                
                 if (_connection.Connected == false)
                 {
                     _connection.Connect(_clientEndPoint, listener);

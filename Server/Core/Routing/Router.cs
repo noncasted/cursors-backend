@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Server.Core.Connection;
 using Server.Core.Routing.Routes;
 using Server.Core.Users;
@@ -29,8 +28,6 @@ namespace Server.Core.Routing
         
         public void Route(ServerRoute serverRoute, User _user, Packet _packet)
         {
-            Console.WriteLine($"New route: {serverRoute}");
-            
             if (IsGlobal(serverRoute) == true)
                 globalRoutes[serverRoute](_user, _packet);
             else

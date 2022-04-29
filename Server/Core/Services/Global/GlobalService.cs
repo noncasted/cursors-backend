@@ -1,6 +1,4 @@
-﻿using Server.Core.Routing;
-
-namespace Server.Core.Services.Global
+﻿namespace Server.Core.Services.Global
 {
     public abstract class GlobalService
     {

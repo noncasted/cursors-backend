@@ -40,7 +40,7 @@ namespace Server.Core.Processing
             lock (executePackets)
             {
                 executePackets.Add(new ExecutablePacket(_action, _data));
-                actionToExecuteOnMainThread = true;
+                packetToExecuteOnMainThread = true;
             }
         }
 

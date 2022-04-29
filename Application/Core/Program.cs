@@ -1,9 +1,4 @@
-﻿using System;
-using System.Threading;
-using Application.Core.Configuration;
-using Domain.Connection;
-
-namespace Application.Core
+﻿namespace Application.Core
 {
     /*internal static class Program
     {

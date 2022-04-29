@@ -58,9 +58,10 @@ namespace Server.Core.Connection.Connection.Handling
 
         public void HandleData(Packet _packetData)
         {
+            
             int _packetLength = _packetData.ReadInt();
             byte[] _packetBytes = _packetData.ReadBytes(_packetLength);
-                
+            
             ThreadManager.AddConnectionTask(OnDataReceived, _packetBytes);
         }
         

@@ -4,7 +4,6 @@ using Application.Core.DataTransfer;
 using Application.Core.ListenerProcessors;
 using Application.Core.Routing;
 using Domain.DataTransfer;
-using Domain.Services;
 using Infrastructure.Matchmaking;
 
 namespace Application.Core

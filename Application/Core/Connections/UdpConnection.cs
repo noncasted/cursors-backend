@@ -6,7 +6,6 @@ using Application.Core.DataTransfer;
 using Application.Core.Routing;
 using Domain.Connection;
 using Domain.DataTransfer;
-using Domain.Services;
 
 namespace Application.Core.Connections
 {

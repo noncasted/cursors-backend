@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Domain.Services;
 
 namespace Domain.DataTransfer
 {

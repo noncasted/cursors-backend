@@ -85,7 +85,7 @@ namespace Server.Core.Connection.Connection.Handling
         private void ReceiveCallback(IAsyncResult _result)
         {
             int _byteLength = stream.EndRead(_result);
-
+            
             if (_byteLength <= 0)
             {
                 // TODO: Disconnect
@@ -113,7 +113,7 @@ namespace Server.Core.Connection.Connection.Handling
             int _packetLength = 0;
 
             receivedData.SetBytes(_data);
-
+            
             if (receivedData.UnreadLength() >= 4)
             {
                 _packetLength = receivedData.ReadInt();
@@ -121,7 +121,7 @@ namespace Server.Core.Connection.Connection.Handling
                 if (_packetLength <= 0)
                     return true;
             }
-
+            
             while (_packetLength > 0 && _packetLength <= receivedData.UnreadLength())
             {
                 byte[] _packetBytes = receivedData.ReadBytes(_packetLength);

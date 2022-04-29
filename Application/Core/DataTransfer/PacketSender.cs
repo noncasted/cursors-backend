@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Application.Core.Clients;
 using Domain.Connection;
 using Domain.DataTransfer;
-using Domain.Services;
 
 namespace Application.Core.DataTransfer
 {

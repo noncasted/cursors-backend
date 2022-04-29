@@ -1,5 +1,4 @@
-﻿using System;
-using Server.Core.Connection;
+﻿using Server.Core.Connection;
 using Server.Core.Connection.Connection.Handling;
 using Server.Core.Routing;
 using Server.Core.Routing.Routes;
@@ -26,7 +25,6 @@ namespace Server.Core.Users
         
         private void OnDataReceived(Packet _packet)
         {
-            Span<byte> _array = stackalloc byte[10];
             ServerRoute _route = (ServerRoute)_packet.ReadInt();
             
             router.Route(_route, this, _packet);

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Application.Core.Services
+﻿namespace Application.Core.Services
 {
     public class ServicesHandler
     {
