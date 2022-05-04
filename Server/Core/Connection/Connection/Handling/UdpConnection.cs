@@ -31,7 +31,7 @@ namespace Server.Core.Connection.Connection.Handling
             return false;
         }
 
-        public void Connect(IPEndPoint _endPoint, UdpClient _udpListener)
+        public void Connect(IPEndPoint _endPoint, UdpClient _udpListener, int _id)
         {
             if (_endPoint == null)
             {
@@ -45,6 +45,9 @@ namespace Server.Core.Connection.Connection.Handling
             
             using (Packet _packet = new Packet(ClientRoute.On_Connected_Udp))
             {
+                _packet.Write("Connected to server via UDP.");
+                _packet.Write(_id);
+
                 SendData(_packet);
             }
         }
@@ -58,7 +61,6 @@ namespace Server.Core.Connection.Connection.Handling
 
         public void HandleData(Packet _packetData)
         {
-            
             int _packetLength = _packetData.ReadInt();
             byte[] _packetBytes = _packetData.ReadBytes(_packetLength);
             

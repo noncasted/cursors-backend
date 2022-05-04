@@ -34,17 +34,20 @@ namespace Server.Core.Connection.Connection.Processing
                 int _clientId = _packet.ReadInt();
 
                 if (_clientId == 0)
+                {
+                    if (users.GetFirstAvailableClient(out Client _client) == false)
+                    {
+                        Console.WriteLine($"Failed to connect: Server full!");
+                
+                        return;
+                    }
+                    Console.WriteLine($"Connect new udp client on id: {_client.Id}");
+                    _client.Udp.Connect(_clientEndPoint, listener, _client.Id);
                     return;
+                }
                 
                 UdpConnection _connection = users.GetUser(_clientId).Client.Udp;
                 
-                if (_connection.Connected == false)
-                {
-                    _connection.Connect(_clientEndPoint, listener);
-                    
-                    return;
-                }
-
                 if (_connection.CheckEndPointEquality(_clientEndPoint) == true)
                     _connection.HandleData(_packet);
             }

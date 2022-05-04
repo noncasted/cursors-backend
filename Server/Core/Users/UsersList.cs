@@ -30,7 +30,7 @@ namespace Server.Core.Users
         {
             for (int i = 1; i <= maxClients; i++)
             {
-                if (users[i].Client.Tcp.Connected == true)
+                if (users[i].Client.Tcp.Connected == true || users[i].Client.Udp.Connected == true)
                     continue;
                 
                 _client = users[i].Client;
