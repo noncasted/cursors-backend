@@ -1,26 +1,28 @@
 ﻿using System;
-using System.Net;
 using System.Net.Sockets;
 using Server.Core.Config;
+using Server.Core.Connection.Packets;
 using Server.Core.Processing;
 using Server.Core.Routing.Routes;
 
 namespace Server.Core.Connection.Connection.Handling
 {
-    public class TcpConnection
+    public class TcpConnection : IConnection
     {
-        public TcpConnection(Action<Packet> _receivingCallback)
+        public TcpConnection(Action<Packet> _receivingCallback, Action _disconectCallback)
         {
             dataBufferSize = Constants.TcpBufferSize;
             receiveBuffer = new byte[dataBufferSize];
 
             receivingCallback = _receivingCallback;
+            disconnectCallback = _disconectCallback;
         }
 
         private readonly int dataBufferSize;
         private readonly byte[] receiveBuffer;
         
         private readonly Action<Packet> receivingCallback;
+        private readonly Action disconnectCallback;
 
         private readonly Packet receivedData = new Packet();
 
@@ -28,9 +30,6 @@ namespace Server.Core.Connection.Connection.Handling
 
         private TcpClient socket;
         private NetworkStream stream;
-
-        public bool Connected => connected;
-        public EndPoint RemoteEndPoint => socket.Client.RemoteEndPoint;
 
         public void Connect(TcpClient _socket, int _id)
         {
@@ -54,11 +53,11 @@ namespace Server.Core.Connection.Connection.Handling
                 _packet.Write("Connected to the server");
                 _packet.Write(_id);
                 
-                SendData(_packet);
+                SendData(_packet, PacketType.Reliable);
             }
         }
-
-        public void SendData(Packet _packet)
+        
+        public void SendData(Packet _packet, PacketType _type)
         {
             _packet.WriteLength();
             
@@ -88,7 +87,7 @@ namespace Server.Core.Connection.Connection.Handling
             
             if (_byteLength <= 0)
             {
-                // TODO: Disconnect
+                disconnectCallback?.Invoke();
 
                 return;
             }
@@ -102,6 +101,7 @@ namespace Server.Core.Connection.Connection.Handling
             if (stream.CanRead == false)
             {
                 Console.WriteLine($"Stream reading is unavailable");
+                disconnectCallback?.Invoke();
                 return;
             }
 
@@ -153,6 +153,19 @@ namespace Server.Core.Connection.Connection.Handling
             {
                 receivingCallback?.Invoke(_packet);
             }
+        }
+
+        public void Disconnect()
+        {
+            socket.Close();
+            stream = null;
+            receivedData.ResetBuffers();
+            connected = false;
+
+            for (int i = 0; i < receiveBuffer.Length; i++)
+                receiveBuffer[i] = 0;
+
+            socket = null;
         }
     }
 }

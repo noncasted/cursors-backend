@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using Server.Core.Connection.Packets;
 using Server.Core.Processing;
 using Server.Core.Routing.Routes;
 
 namespace Server.Core.Connection.Connection.Handling
 {
-    public class UdpConnection
+    public class UdpConnection : IConnection
     {
-        public UdpConnection(Action<Packet> _receivingCallback)
+        public UdpConnection(Action<Packet> _receivingCallback, int _clientId)
         {
             receivingCallback = _receivingCallback;
+            ClientId = _clientId;
         }
 
+        public readonly int ClientId;
+        
         private readonly Action<Packet> receivingCallback;
 
-        private bool connected = false;
-        
         private IPEndPoint endPoint;
         private UdpClient udpListener;
 
-        public bool Connected => connected;
-        public EndPoint RemoteEndPoint => udpListener.Client.RemoteEndPoint;
+        public event Action<UdpConnection> Disconnected;
 
         public bool CheckEndPointEquality(IPEndPoint _endPoint)
         {
@@ -41,24 +42,23 @@ namespace Server.Core.Connection.Connection.Handling
             
             endPoint = _endPoint;
             udpListener = _udpListener;
-            connected = true;
             
             using (Packet _packet = new Packet(ClientRoute.On_Connected_Udp))
             {
                 _packet.Write("Connected to server via UDP.");
                 _packet.Write(_id);
 
-                SendData(_packet);
+                SendData(_packet, PacketType.Unreliable);
             }
         }
 
-        public void SendData(Packet _packet)
+        public void SendData(Packet _packet, PacketType _type)
         {
             _packet.WriteLength();
             
             udpListener.BeginSend(_packet.ToArray(), _packet.GetLength(), endPoint, null, null);
         }
-
+        
         public void HandleData(Packet _packetData)
         {
             int _packetLength = _packetData.ReadInt();
@@ -73,6 +73,13 @@ namespace Server.Core.Connection.Connection.Handling
             {
                 receivingCallback?.Invoke(_packet);
             }
+        }
+
+        public void Disconnect()
+        {
+            endPoint = null;
+            
+            Disconnected?.Invoke(this);
         }
     }
 }

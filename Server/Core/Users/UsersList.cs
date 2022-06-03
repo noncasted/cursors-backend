@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Server.Core.Config;
 using Server.Core.Connection.Connection.Handling;
 using Server.Core.Routing;
 
@@ -13,7 +12,7 @@ namespace Server.Core.Users
 
             for (int i = 1; i <= maxClients; i++)
             {
-                User _user = new User(i, ServerConfig.DefaultConnection, _router);
+                User _user = new User(i, _router);
                 users.Add(i, _user);
             }
         }
@@ -21,16 +20,11 @@ namespace Server.Core.Users
         private readonly int maxClients;
         private readonly Dictionary<int, User> users = new Dictionary<int, User>();
 
-        public User GetUser(int _userId)
-        {
-            return users[_userId];
-        }
-        
         public bool GetFirstAvailableClient(out Client _client)
         {
             for (int i = 1; i <= maxClients; i++)
             {
-                if (users[i].Client.Tcp.Connected == true || users[i].Client.Udp.Connected == true)
+                if (users[i].Client.Connected == true)
                     continue;
                 
                 _client = users[i].Client;

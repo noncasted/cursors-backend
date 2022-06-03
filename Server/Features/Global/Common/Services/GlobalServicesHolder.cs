@@ -12,8 +12,10 @@ namespace Server.Features.Global.Common.Services
         {
             services = new List<GlobalService>();
 
+            RoomsList _roomsList = new RoomsList();
+            
             services.Add(new ConnectorService());
-            services.Add(new MatchmakingService());
+            services.Add(new MatchmakingService(_router, _roomsList));
             
             GlobalBinder _binder = new GlobalBinder(_router);
             

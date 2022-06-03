@@ -33,8 +33,10 @@ namespace Server.Core.Connection.Connection.Processing
                 
                 return;
             }
-            
-            _client.Tcp.Connect(_tcpClient, _client.Id);
+
+            TcpConnection _connection = new TcpConnection(_client.DataReceivedCallback, _client.Disconnect);
+            _connection.Connect(_tcpClient, _client.Id);
+            _client.InjectConnection(_connection);
         }
     }
 }

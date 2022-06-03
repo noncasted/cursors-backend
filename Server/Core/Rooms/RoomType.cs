@@ -1,8 +1,8 @@
 ﻿namespace Server.Core.Rooms
 {
-    public enum RoomType
+    public enum RoomType : int
     {
-        Hub,
-        Game
+        Hub = 1,
+        Game = 2
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Server.Core.Connection;
+using Server.Core.Connection.Packets;
 using Server.Core.Routing.Routes;
 using Server.Core.Users;
 

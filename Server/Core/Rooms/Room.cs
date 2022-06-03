@@ -19,11 +19,13 @@ namespace Server.Core.Rooms
 
         public readonly int Id;
 
-        public void AddPlayer(User _user)
+        public Player AddPlayer(User _user)
         {
             int _inRoomId = players.Count + 1;
             Player _player = new Player(_user, this);
             players.Add(_inRoomId, _player);
+
+            return _player;
         }
 
         public void RemovePlayer(Player _player)

@@ -1,47 +1,45 @@
 ﻿using System;
-using Server.Core.Routing.Routes;
+using Server.Core.Connection.Packets;
 
 namespace Server.Core.Connection.Connection.Handling
 {
     public class Client
     {
-        public Client(int _clientID, TargetConnection _defaultConnection, Action<Packet> _dataReceivedCallback)
+        public Client(int _clientID, Action<Packet> _dataReceivedCallback)
         {
             id = _clientID;
-            
-            Tcp = new TcpConnection(_dataReceivedCallback);
-            Udp = new UdpConnection(_dataReceivedCallback);
 
-            defaultConnection = _defaultConnection;
+            DataReceivedCallback = _dataReceivedCallback;
         }
-        
-        public readonly TcpConnection Tcp;
-        public readonly UdpConnection Udp;
+
+        public readonly Action<Packet> DataReceivedCallback;
+
+        private IConnection connection;
+        private bool connected = false; 
 
         private readonly int id;
-        private readonly TargetConnection defaultConnection;
         
         public int Id => id;
+        public bool Connected => connected;
 
-        public void SendData(ClientRoute _route, params byte[][] _data)
+        public void InjectConnection(IConnection _connection)
         {
-            using (Packet _packet = new Packet(_route))
-            {
-                for (int i = 0; i < _data.Length; i++)
-                    _packet.Write(_data[i]);
-                
-                switch (defaultConnection)
-                {
-                    case TargetConnection.TCP:
-                        Tcp.SendData(_packet);
-                        break;
-                    case TargetConnection.UDP:
-                        Udp.SendData(_packet);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
+            connection = _connection;
+            connected = false;
+        }
+
+        public void SendData(Packet _packet, PacketType _type)
+        {
+            connection.SendData(_packet, _type);
+        }
+        
+        public void Disconnect()
+        {
+            connected = false;
+            
+            connection.Disconnect();
+            
+            Console.WriteLine("Client disconnected");
         }
     }
 }

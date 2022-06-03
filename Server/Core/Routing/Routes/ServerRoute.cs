@@ -5,5 +5,6 @@
         On_Connected_Tcp = 1,
         On_Connected_Udp = 2,
         Create_Room = 3,
+        Leave_Room = 4,
     }
 }

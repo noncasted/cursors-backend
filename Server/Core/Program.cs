@@ -14,7 +14,7 @@ namespace Server.Core
         {
             Console.WriteLine("Start server");
             
-            ServerConfig.Configurate(50, 26950, TargetConnection.TCP);
+            ServerConfig.Configurate(50, 26950);
 
             threadsRunner = new ThreadsRunner();
             server = new ServerHandler();

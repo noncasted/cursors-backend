@@ -55,12 +55,18 @@
         <Compile Include="Core\Config\Constants.cs" />
         <Compile Include="Core\Config\ServerConfig.cs" />
         <Compile Include="Core\Connection\Connection\Handling\Client.cs" />
-        <Compile Include="Core\Connection\Connection\Handling\TargetConnection.cs" />
+        <Compile Include="Core\Connection\Connection\Handling\ClientSendExtensions.cs" />
+        <Compile Include="Core\Connection\Connection\Handling\IConnection.cs" />
         <Compile Include="Core\Connection\Connection\Handling\TcpConnection.cs" />
         <Compile Include="Core\Connection\Connection\Handling\UdpConnection.cs" />
+        <Compile Include="Core\Connection\Connection\Handling\UserSendExtensions.cs" />
         <Compile Include="Core\Connection\Connection\Processing\TcpProcessor.cs" />
         <Compile Include="Core\Connection\Connection\Processing\UdpProcessor.cs" />
-        <Compile Include="Core\Connection\Packet.cs" />
+        <Compile Include="Core\Connection\Converter.cs" />
+        <Compile Include="Core\Connection\Packets\Packet.cs" />
+        <Compile Include="Core\Connection\Packets\PacketReading.cs" />
+        <Compile Include="Core\Connection\Packets\PacketWriting.cs" />
+        <Compile Include="Core\Connection\PacketType.cs" />
         <Compile Include="Core\Processing\ExecutablePacket.cs" />
         <Compile Include="Core\Processing\ProcessableThread.cs" />
         <Compile Include="Core\Processing\ThreadManager.cs" />
@@ -88,6 +94,7 @@
         <Compile Include="Features\Global\Connector\ConnectorService.cs" />
         <Compile Include="Features\Global\Matchmaking\MatchmakingService.cs" />
         <Compile Include="Features\Global\Matchmaking\RoomCreator.cs" />
+        <Compile Include="Features\Global\Matchmaking\RoomsList.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

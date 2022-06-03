@@ -1,5 +1,6 @@
 ﻿using Server.Core.Connection;
 using Server.Core.Connection.Connection.Handling;
+using Server.Core.Connection.Packets;
 using Server.Core.Routing;
 using Server.Core.Routing.Routes;
 
@@ -7,9 +8,9 @@ namespace Server.Core.Users
 {
     public class User
     {
-        public User(int _clientID, TargetConnection _defaultConnection, Router _router)
+        public User(int _clientID, Router _router)
         {
-            Client = new Client(_clientID, _defaultConnection, OnDataReceived);
+            Client = new Client(_clientID, OnDataReceived);
             router = _router;
         }
         
